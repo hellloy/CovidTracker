@@ -1,0 +1,24 @@
+
+<div fxLayout="column" fxLayoutAlign="center center">
+  <div fxLayout="row" fx fxFlex="100" fxLayoutAlign="center center" >
+    <h1 class="mat-display-1">U.S. COVID Risk Tracker </h1>
+  </div>
+  <div fxLayout="row" fxFlex="100" fxLayoutAlign="center center" >
+    <mat-form-field appearance="outline" style="width: 300px;">
+      <mat-label>METRIC</mat-label>
+      <mat-select [ngModel]="metric" (valueChange)="metricChange($event)">
+        <mat-option value="Overall risk level">Overall Risk Level</mat-option>
+        <mat-option value="Cases per 100k level">Cases Per 100k Level</mat-option>
+        <mat-option value="Test positivity ration level">Test Positivity Ration Level</mat-option>
+        <mat-option value="Infection rate level">Infection Rate Level</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" >
+    <svg>
+    </svg>
+  </div>
+</div>
+<div class="loading-shade" *ngIf="this.busyService.isLoading | async">
+  <mat-spinner mode="indeterminate" color="accent"></mat-spinner>
+</div>
