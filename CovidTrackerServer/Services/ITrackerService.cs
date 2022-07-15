@@ -6,6 +6,6 @@ namespace CovidTrackerServer.Services
 {
     public interface ITrackerService
     {
-        public Task<IEnumerable<TrackerItemModel>> GetData();
+        public Task<List<TrackerItemModel>> GetData();
     }
 }

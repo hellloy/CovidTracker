@@ -13,7 +13,7 @@ namespace CovidTrackerServer.Services
     public class TrackerService : ITrackerService
     {
         private readonly IMemoryCache _cache;
-         private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public TrackerService(IMemoryCache cache, IConfiguration configuration)
         {
@@ -21,18 +21,18 @@ namespace CovidTrackerServer.Services
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<TrackerItemModel>> GetData()
+        public async Task<List<TrackerItemModel>> GetData()
         {
-            if (!_cache.TryGetValue($"data", out IEnumerable<TrackerItemModel> data))
+            if (!_cache.TryGetValue($"data", out List<TrackerItemModel> data))
             {
                 var key = _configuration.GetSection("AppConfiguration").GetValue<string>("Secret");
                 var url = _configuration.GetSection("AppConfiguration").GetValue<string>("APIKey");
                 
-                WebClient webClient = new WebClient();
+                var webClient = new WebClient();
                 var json = await webClient.DownloadStringTaskAsync(new Uri($"{url}?apiKey={key}"));
                 dynamic stuff = JsonConvert.DeserializeObject(json);
 
-                data = ((IEnumerable)stuff).Cast<dynamic>()
+                data = ((IEnumerable)stuff ?? throw new InvalidOperationException()).Cast<dynamic>()
                     .Select(x => new TrackerItemModel
                     {
                         State = x.state,
@@ -40,7 +40,7 @@ namespace CovidTrackerServer.Services
                         CasesLevel = x.riskLevels?.caseDensity == null ? 0 : x.riskLevels.caseDensity,
                         InfectionLevel = x.riskLevels?.infectionRate == null ? 0 : x.riskLevels.infectionRate,
                         TestPositivityLevel = x.riskLevels?.testPositivityRatio == null ? 0 : x.riskLevels.testPositivityRatio,
-                    });
+                    }).ToList();
 
                 _cache.Set($"data", data, new MemoryCacheEntryOptions
                 {
