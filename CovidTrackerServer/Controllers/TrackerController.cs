@@ -15,17 +15,17 @@ namespace CovidTrackerServer.Controllers
         public TrackerController(ITrackerService trackerService) => _trackerService = trackerService;
 
         [HttpGet]
-        public async Task<Result<IEnumerable<TrackerItemModel>>> Get()
+        public async Task<Result<List<TrackerItemModel>>> Get()
         {
             try
             {
-                IEnumerable<TrackerItemModel> items = await _trackerService.GetData();
-                return await Result<IEnumerable<TrackerItemModel>>.SuccessAsync(items);
+                List<TrackerItemModel> items = await _trackerService.GetData();
+                return await Result<List<TrackerItemModel>>.SuccessAsync(items);
             }
             catch (System.Exception e)
             {
 
-                return await  Result<IEnumerable<TrackerItemModel>>.FailAsync(e.Message);
+                return await  Result<List<TrackerItemModel>>.FailAsync(e.Message);
             }
             
         }
