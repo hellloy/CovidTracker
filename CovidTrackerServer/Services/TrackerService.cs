@@ -23,6 +23,7 @@ namespace CovidTrackerServer.Services
 
         public async Task<List<TrackerItemModel>> GetData()
         {
+            
             if (!_cache.TryGetValue($"data", out List<TrackerItemModel> data))
             {
                 var key = _configuration.GetSection("AppConfiguration").GetValue<string>("Secret");

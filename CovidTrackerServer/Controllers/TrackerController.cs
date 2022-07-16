@@ -17,17 +17,9 @@ namespace CovidTrackerServer.Controllers
         [HttpGet]
         public async Task<Result<List<TrackerItemModel>>> Get()
         {
-            try
-            {
-                List<TrackerItemModel> items = await _trackerService.GetData();
-                return await Result<List<TrackerItemModel>>.SuccessAsync(items);
-            }
-            catch (System.Exception e)
-            {
+            List<TrackerItemModel> items = await _trackerService.GetData();
+            return await Result<List<TrackerItemModel>>.SuccessAsync(items);
 
-                return await  Result<List<TrackerItemModel>>.FailAsync(e.Message);
-            }
-            
         }
     }
 }
